@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,18 +27,29 @@ fun Calculator(
     modifier: Modifier = Modifier
 ) {
     val elements = listOf(
-        listOf("AC", "()", "%", "/"),
+        listOf("AC", "( )", "%", "/"),
         listOf("7", "8", "9", "X"),
         listOf("4", "5", "6", "-"),
         listOf("1", "2", "3", "+")
     )
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primaryContainer),
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 0.dp,
+                        topEnd = 0.dp,
+                        bottomStart = 50.dp,
+                        bottomEnd = 50.dp
+                    )
+                )
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .weight(1f)
+                .padding(bottom = 16.dp, start = 40.dp, end = 40.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.End
 
@@ -52,92 +67,100 @@ fun Calculator(
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             )
+        }
 
-            Row(
-                modifier = modifier.fillMaxWidth()
-            ) {
-                for (element in listOf("√", "π", "^", "!")) {
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = element,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        textAlign = TextAlign.Center
-                    )
-                }
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            for (element in listOf("√", "π", "^", "!")) {
+                Text(
+                    modifier = Modifier.weight(1f)
+                        .clip(CircleShape),
+                    text = element,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center
+                )
             }
+        }
 
-            elements.forEachIndexed { index, listElements ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    for (element in listElements) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    color = when (element) {
-                                        "AC" -> MaterialTheme.colorScheme.secondary
-                                        "()", "%", "/", "X", "-", "+" -> MaterialTheme.colorScheme.tertiary
-                                        else -> MaterialTheme.colorScheme.primary
-                                    }
-                                )
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .aspectRatio(1f),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                textAlign = TextAlign.Center,
-                                text = element,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = 40.sp
-                            )
-                        }
-                    }
-                }
-            }
+        elements.forEachIndexed { index, listElements ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Box(
-                    modifier = Modifier.weight(2f)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .aspectRatio(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "0",
-                        fontSize = 40.sp,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                for (element in listElements) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(CircleShape)
+                            .background(
+                                color = when (element) {
+                                    "AC" -> MaterialTheme.colorScheme.secondary
+                                    "( )", "%", "/", "X", "-", "+" -> MaterialTheme.colorScheme.tertiary
+                                    else -> MaterialTheme.colorScheme.primary
+                                }
+                            )
+                            .aspectRatio(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            textAlign = TextAlign.Center,
+                            text = element,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 40.sp
+                        )
+                    }
                 }
-                Box(
-                    modifier = Modifier.weight(1f)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .aspectRatio(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = ",",
-                        fontSize = 40.sp,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-                Box(
-                    modifier = Modifier.weight(1f)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .aspectRatio(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "=",
-                        fontSize = 40.sp,
-                        color = MaterialTheme.colorScheme.tertiary
-                    )
-                }
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(2f)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary)
+                    .aspectRatio(2f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "0",
+                    fontSize = 40.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary)
+                    .aspectRatio(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = ",",
+                    fontSize = 40.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.tertiary)
+                    .aspectRatio(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "=",
+                    fontSize = 40.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
     }
